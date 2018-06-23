@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -43,9 +44,7 @@ public class WebControllerAop {
         //用的最多 通知的签名
         Signature signature = joinPoint.getSignature();
         //代理的是哪一个方法
-        log.info(signature.getName());
-        //AOP代理类的名字
-        log.info(signature.getDeclaringTypeName());
+        log.info(signature.getDeclaringTypeName()+":"+signature.getName()+"is start ");
         //AOP代理类的类（class）信息
         signature.getDeclaringType();
         //获取RequestAttributes
@@ -63,4 +62,20 @@ public class WebControllerAop {
         log.info(JSONObject.toJSONString(parameterMap));
 
     }
+
+    /**
+     * 后置最终通知（目标方法只要执行完了就会执行后置通知方法）
+     * @param joinPoint
+     */
+    @After("executeService()")
+    public void doAfterAdvice(JoinPoint joinPoint){
+        //AOP代理类的信息
+        joinPoint.getThis();
+        //代理的目标对象
+        joinPoint.getTarget();
+        Signature signature = joinPoint.getSignature();
+        log.info(signature.getDeclaringTypeName()+":"+signature.getName()+" is end");
+    }
+
+
 }
