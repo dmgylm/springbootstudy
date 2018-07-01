@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -67,15 +64,16 @@ public class WebControllerAop {
      * 后置最终通知（目标方法只要执行完了就会执行后置通知方法）
      * @param joinPoint
      */
-    @After("executeService()")
-    public void doAfterAdvice(JoinPoint joinPoint){
+    @AfterReturning(pointcut="executeService()",returning = "rvt")
+    public void doAfterAdvice(JoinPoint joinPoint,Object rvt){
         //AOP代理类的信息
         joinPoint.getThis();
         //代理的目标对象
         joinPoint.getTarget();
         Signature signature = joinPoint.getSignature();
-        log.info(signature.getDeclaringTypeName()+":"+signature.getName()+" is end");
+        log.info(signature.getDeclaringTypeName()+":"+signature.getName()+" is end return:"+JSONObject.toJSONString(rvt));
     }
+
 
 
 }

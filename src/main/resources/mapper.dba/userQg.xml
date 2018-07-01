@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.dba.UserQgDao" >
+
+    <insert id="insert"  parameterType="com.example.demo.dto.UserQg">
+       insert into user_qg(user_name,token_id)VALUES (#{userName},#{tokenId})
+    </insert>
+
+
+    <select id="showUserQgInfoList" resultType="com.example.demo.dto.UserQg">
+        SELECT <include refid="UserQgDto"/> from user_qg
+    </select>
+
+    <sql id="UserQgDto">
+        id,user_name as userName,token_id as tokenId
+    </sql>
+
+</mapper>
