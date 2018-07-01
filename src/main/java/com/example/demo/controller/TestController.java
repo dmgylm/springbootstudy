@@ -63,7 +63,7 @@ public class TestController {
             return null;
         }else{
             User user=redisClient.get(key,User.class);
-            if(key!=null){
+            if(user!=null){
                 return user;
             }
         }
