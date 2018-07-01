@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.IntegerCodec;
 import com.example.demo.dto.City;
 import com.example.demo.dto.User;
 import com.example.demo.dto.UserQg;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.repository.query.Param;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +41,7 @@ public class TestController {
     private RedisClient redisClient;
 
     @RequestMapping("/showUser/{key}")
-    public List<User> showUser(@PathVariable String key)  {
+    public List<User> showUser(@PathVariable("key") String key)  {
         if(StringUtils.isEmpty(key)){
             return null;
         }else{
@@ -54,8 +56,8 @@ public class TestController {
     }
 
 
-    @RequestMapping("/getUserByid/{id}")
-    public User getUserbyId(@PathVariable Integer id)  {
+    @RequestMapping("/getUserById/{id}")
+    public User getUserbyId(@PathVariable("id") String id)  {
         String key= id+"userInfo";
         if(StringUtils.isEmpty(id)){
             return null;
@@ -65,7 +67,7 @@ public class TestController {
                 return user;
             }
         }
-        redisClient.set(key,userService.getUserById(id));
+        redisClient.set(key,userService.getUserById(Integer.valueOf(id)));
         return redisClient.get(key,User.class);
     }
 
